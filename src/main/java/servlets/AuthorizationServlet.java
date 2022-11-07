@@ -28,18 +28,23 @@ public class AuthorizationServlet extends HttpServlet {
         AchievementService achievementService = (AchievementService) getServletContext().getAttribute("ach-service");
         Validator validator = new ValidatorImplAuth();
 
-        MessageForUser message = validator.validate(userService, connector, req);
-        if (message.isSuccessful()) {
-            achievementService.addUserAchievements(connector.getConnection(),(Integer)req.getSession().getAttribute("id"));
-            achievementService.updateAch(connector.getConnection(), (Integer)req.getSession().getAttribute("id"), 1);
-            req.getSession().setAttribute("is_authorized","true");
-            resp.sendRedirect(req.getContextPath());
+        try{
+            MessageForUser message = validator.validate(userService, connector, req);
+            if (message.isSuccessful()) {
+                achievementService.addUserAchievements(connector.getConnection(),(Integer)req.getSession().getAttribute("id"));
+                achievementService.updateAch(connector.getConnection(), (Integer)req.getSession().getAttribute("id"), 1);
+                req.getSession().setAttribute("is_authorized","true");
+                resp.sendRedirect(req.getContextPath());
+            }
+            else {
+                req.getSession().setAttribute("is_authorized", "false");
+                req.setAttribute("is_authorized", "false");
+                req.setAttribute("failedDescription", message.getDescription());
+                req.getRequestDispatcher("/WEB-INF/pages/log_in.jsp").forward(req, resp);
+            }
         }
-        else {
-            req.getSession().setAttribute("is_authorized", "false");
-            req.setAttribute("is_authorized", "false");
-            req.setAttribute("failedDescription", message.getDescription());
-            req.getRequestDispatcher("/WEB-INF/pages/log_in.jsp").forward(req, resp);
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
         }
     }
 }

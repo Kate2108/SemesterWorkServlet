@@ -18,9 +18,13 @@ public class UserAchievementsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DBConnector connector = (DBConnector) getServletContext().getAttribute("dbConnector");
         AchievementService achievementService = (AchievementService) getServletContext().getAttribute("ach-service");
-
-        Collection<Achievement> collection = achievementService.getUserAchievements(connector.getConnection(), (Integer) req.getSession().getAttribute("id"));
-        req.setAttribute("achievements", collection);
-        req.getRequestDispatcher("/WEB-INF/pages/user_achievements.jsp").forward(req,resp);
+        try {
+            Collection<Achievement> collection = achievementService.getUserAchievements(connector.getConnection(), (Integer) req.getSession().getAttribute("id"));
+            req.setAttribute("achievements", collection);
+            req.getRequestDispatcher("/WEB-INF/pages/user_achievements.jsp").forward(req, resp);
+        }
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
+        }
     }
 }

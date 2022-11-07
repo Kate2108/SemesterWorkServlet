@@ -31,27 +31,31 @@ public class GroupServlet extends HttpServlet {
         DBConnector connector = (DBConnector) getServletContext().getAttribute("dbConnector");
         AchievementService achievementService = (AchievementService) getServletContext().getAttribute("ach-service");
         GroupService groupService = (GroupService) getServletContext().getAttribute("group-service");
+        try {
+            if (!(req.getParameter("addGroup") == null) && !(req.getParameter("addCount").equals(""))) {
+                groupService.addGroup((Integer) req.getSession().getAttribute("id"), Group.builder()
+                        .name(req.getParameter("addGroup"))
+                        .countOfMembers(Integer.parseInt(req.getParameter("addCount")))
+                        .build(), connector.getConnection());
+                achievementService.updateAch(connector.getConnection(), (Integer) req.getSession().getAttribute("id"), 2);
+                achievementService.updateAch(connector.getConnection(), (Integer) req.getSession().getAttribute("id"), 3);
+            }
+            if (!(req.getParameter("deleteName") == null)) {
+                groupService.deleteGroup(req.getParameter("deleteName"), (Integer) req.getSession().getAttribute("id"), connector.getConnection());
+                achievementService.updateAch(connector.getConnection(), (Integer) req.getSession().getAttribute("id"), 5);
+            }
 
-        if (!(req.getParameter("addGroup") == null) && !(req.getParameter("addCount").equals(""))){
-            groupService.addGroup((Integer) req.getSession().getAttribute("id"),Group.builder()
-                    .name(req.getParameter("addGroup"))
-                    .countOfMembers(Integer.parseInt(req.getParameter("addCount")))
-                    .build(), connector.getConnection());
-            achievementService.updateAch(connector.getConnection(),(Integer) req.getSession().getAttribute("id"), 2 );
-            achievementService.updateAch(connector.getConnection(),(Integer) req.getSession().getAttribute("id"), 3 );
-        }
-        if (!(req.getParameter("deleteName") == null)){
-            groupService.deleteGroup(req.getParameter("deleteName"), (Integer) req.getSession().getAttribute("id"), connector.getConnection());
-            achievementService.updateAch(connector.getConnection(),(Integer) req.getSession().getAttribute("id"), 5 );
-        }
+            if (!(req.getParameter("name") == null) && !(req.getParameter("newCount").equals(""))) {
+                groupService.updateGroup(Group.builder()
+                        .name(req.getParameter("name"))
+                        .countOfMembers(Integer.parseInt(req.getParameter("newCount")))
+                        .build(), (Integer) req.getSession().getAttribute("id"), req.getParameter("newCount"), connector.getConnection());
+            }
 
-        if (!(req.getParameter("name") == null) && !(req.getParameter("newCount").equals(""))){
-            groupService.updateGroup(Group.builder()
-                    .name(req.getParameter("name"))
-                    .countOfMembers(Integer.parseInt(req.getParameter("newCount")))
-                    .build(),(Integer) req.getSession().getAttribute("id"),req.getParameter("newCount"),connector.getConnection());
+            resp.sendRedirect(req.getContextPath() + "/groups");
         }
-
-        resp.sendRedirect(req.getContextPath() +"/groups");
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
+        }
     }
 }

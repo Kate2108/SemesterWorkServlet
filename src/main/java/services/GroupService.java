@@ -1,7 +1,7 @@
 package services;
 
 import models.Group;
-import services.repository.GroupRepository;
+import repositories.GroupRepository;
 
 import java.sql.Connection;
 import java.util.Collection;

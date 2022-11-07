@@ -5,10 +5,10 @@ import services.GroupService;
 import services.ScheduleService;
 import services.UserService;
 import services.db.DBConnector;
-import services.repository.impl.AchievementRepositoryImpl;
-import services.repository.impl.GroupRepositoryImpl;
-import services.repository.impl.ScheduleRepositoryImpl;
-import services.repository.impl.UsersRepositoryImpl;
+import repositories.impl.AchievementRepositoryImpl;
+import repositories.impl.GroupRepositoryImpl;
+import repositories.impl.ScheduleRepositoryImpl;
+import repositories.impl.UsersRepositoryImpl;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

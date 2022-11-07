@@ -1,7 +1,7 @@
 package services;
 
 import models.User;
-import services.repository.UsersRepository;
+import repositories.UsersRepository;
 
 import java.sql.Connection;
 import java.util.Collection;

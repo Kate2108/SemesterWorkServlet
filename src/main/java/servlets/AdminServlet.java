@@ -19,21 +19,33 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService userService = (UserService) getServletContext().getAttribute("user-service");
         DBConnector connector = (DBConnector) getServletContext().getAttribute("dbConnector");
-        Collection<User> collection = userService.getUsers(connector.getConnection());
-        req.setAttribute("users", collection);
-        req.getRequestDispatcher("WEB-INF/pages/admin.jsp").forward(req, resp);
+        try {
+            Collection<User> collection = userService.getUsers(connector.getConnection());
+            req.setAttribute("users", collection);
+            req.getRequestDispatcher("WEB-INF/pages/admin.jsp").forward(req, resp);
+        }
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserService userService = (UserService) getServletContext().getAttribute("user-service");
         DBConnector connector = (DBConnector) getServletContext().getAttribute("dbConnector");
-        if(!req.getParameter("deleteId").equals("")){
-            userService.deleteUser(Integer.parseInt(req.getParameter("deleteId")), connector.getConnection());
+        try {
+            if (!req.getParameter("deleteId").equals("")) {
+                if(!((Integer) req.getSession().getAttribute("id") == Integer.parseInt(req.getParameter("deleteId")))) {
+                    userService.deleteUser(Integer.parseInt(req.getParameter("deleteId")), connector.getConnection());
+                }
+            }
+            if (!req.getParameter("countryId").equals("") && !req.getParameter("newCountry").equals("")) {
+                userService.updateUserCountry(Integer.parseInt(req.getParameter("countryId")), req.getParameter("newCountry"), connector.getConnection());
+            }
+            resp.sendRedirect(req.getContextPath() + "/admin");
         }
-        if(!req.getParameter("countryId").equals("") && !req.getParameter("newCountry").equals("")){
-            userService.updateUserCountry(Integer.parseInt(req.getParameter("countryId")), req.getParameter("newCountry"), connector.getConnection());
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
         }
-        resp.sendRedirect(req.getContextPath() +"/admin");
     }
 }

@@ -1,7 +1,7 @@
 package services;
 
 import models.Schedule;
-import services.repository.ScheduleRepository;
+import repositories.ScheduleRepository;
 
 import java.sql.Connection;
 import java.util.Collection;
@@ -20,10 +20,6 @@ public class ScheduleService {
 
     public void deleteUserSchedule(Connection connection, int userId, Schedule schedule){
         scheduleRepository.deleteUserSchedule(connection, userId, schedule);
-    }
-
-    public void deleteUserAllSchedule(Connection connection, int userId, String group){
-        scheduleRepository.deleteUserAllSchedule(connection, userId, group);
     }
 
     public boolean addUserSchedule(Connection connection, int userId, Schedule schedule){

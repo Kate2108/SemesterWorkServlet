@@ -1,7 +1,7 @@
 package services;
 
 import models.Achievement;
-import services.repository.AchievementRepository;
+import repositories.AchievementRepository;
 
 import java.sql.Connection;
 import java.util.Collection;

@@ -4,8 +4,6 @@
 <head>
     <title>Registration</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 </head>
 <body class="reg_body">
     <form action="registration" method="POST" >
@@ -13,7 +11,9 @@
 
             <div class="mb-3">
                 <label for="InputUsername" class="form-label">Username</label>
-                <input type="text" class="form-control" id="InputUsername" name="username" required maxlength="40" minlength="2"/>
+                <input type="text" class="form-control" id="InputUsername" name="username" required minlength="2" maxlength="40"/>
+                <p><span id="typeChars"></span></p>
+                <p><span id="leftChars"></span></p>
             </div>
 
             <div class="mb-3">
@@ -43,6 +43,7 @@
             <br>
             <label for="selector" class="form-label">Country</label>
             <select class="form-select" name="country" aria-label="Country" required id="selector">
+                <option></option>
                 <option>Armenia</option>
                 <option>Belarus</option>
                 <option>China</option>
@@ -55,6 +56,7 @@
             <br>
             <label for="selector1" class="form-label">Type of sport</label>
             <select class="form-select" name="sport" aria-label="Sport" required id="selector1">
+                <option></option>
                 <option>Badminton</option>
                 <option>Basketball</option>
                 <option>Football</option>

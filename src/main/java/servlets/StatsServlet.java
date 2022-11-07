@@ -25,33 +25,37 @@ public class StatsServlet extends HttpServlet {
         DBConnector connector = (DBConnector) getServletContext().getAttribute("dbConnector");
         UserService userService = (UserService) getServletContext().getAttribute("user-service");
         AchievementService achievementService = (AchievementService) getServletContext().getAttribute("ach-service");
+        try {
+            User user = userService.findUserId((Integer) req.getSession().getAttribute("id"), connector.getConnection());
 
-        User user = userService.findUserId((Integer) req.getSession().getAttribute("id"), connector.getConnection());
-
-        if(!req.getParameter("newCategory").equals("")){
-            if(user.getCategory().equals("no category")){
-                achievementService.updateAch(connector.getConnection(),(Integer)req.getSession().getAttribute("id"), 4);
+            if (!req.getParameter("newCategory").equals("")) {
+                if (user.getCategory().equals("no category")) {
+                    achievementService.updateAch(connector.getConnection(), (Integer) req.getSession().getAttribute("id"), 4);
+                }
+                userService.updateUserStat(
+                        user.getId(),
+                        "category",
+                        req.getParameter("newCategory"),
+                        connector.getConnection());
             }
-            userService.updateUserStat(
-                    user.getId(),
-                    "category",
-                    req.getParameter("newCategory"),
-                    connector.getConnection());
+            if (!req.getParameter("exp").equals("")) {
+                userService.updateUserStat(
+                        user.getId(),
+                        "workexp",
+                        req.getParameter("exp"),
+                        connector.getConnection());
+            }
+            if (!req.getParameter("newClass").equals("")) {
+                userService.updateUserStat(
+                        user.getId(),
+                        "class",
+                        req.getParameter("newClass"),
+                        connector.getConnection());
+            }
+            resp.sendRedirect(req.getContextPath() + "/profile");
         }
-        if(!req.getParameter("exp").equals("")){
-            userService.updateUserStat(
-                    user.getId(),
-                    "workexp",
-                    req.getParameter("exp"),
-                    connector.getConnection());
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
         }
-        if(!req.getParameter("newClass").equals("")){
-            userService.updateUserStat(
-                    user.getId(),
-                    "class",
-                    req.getParameter("newClass"),
-                    connector.getConnection());
-        }
-        resp.sendRedirect(req.getContextPath() +"/profile");
     }
 }

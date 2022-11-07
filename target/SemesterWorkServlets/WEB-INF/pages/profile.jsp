@@ -5,30 +5,29 @@
 <head>
     <title>My profile</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="<c:url value="/js/script.js"/>"></script>
-<%--        <script >--%>
-<%--        document.addEventListener('DOMContentLoaded', function() {--%>
+        <script >
+        document.addEventListener('DOMContentLoaded', function() {
 
-<%--            button = document.getElementById('logOut');--%>
+            button = document.getElementById('logOut');
 
-<%--            function confirmLogOut() {--%>
-<%--                if (confirm('Are you sure you want to log out?')){--%>
-<%--                    window.location.replace('http://localhost:8080/my-website/logout');--%>
-<%--                }--%>
-<%--                else {--%>
-<%--                    window.location.replace('http://localhost:8080/my-website/profile');--%>
-<%--                }--%>
-<%--            }--%>
-<%--            if(button) {--%>
-<%--                button.addEventListener('click', confirmLogOut);--%>
-<%--            }--%>
-<%--        });</script>--%>
+            function confirmLogOut() {
+                if (confirm('Are you sure you want to log out?')){
+                    window.location.replace('http://localhost:8080/my-website/logout');
+                }
+                else {
+                    window.location.replace('http://localhost:8080/my-website/profile');
+                }
+            }
+            if(button) {
+                button.addEventListener('click', confirmLogOut);
+            }
+        });</script>
+<%--    <script src="<c:url value="/js/script.js"/>"></script>--%>
 </head>
 <t:navbar/>
 <div class="container" style="display: flex;
     flex-direction:row;
-    justify-content: space-between;
-   ">
+    justify-content: space-between;">
 
     <div class="data-form" style=" border-radius: 20px; font-size: large;
     padding: 40px;
@@ -107,6 +106,5 @@
         </div>
     </div>
 </div>
-
 </body>
 </html>

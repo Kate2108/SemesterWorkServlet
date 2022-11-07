@@ -17,14 +17,20 @@ import java.util.Collection;
 
 @WebServlet("/schedule")
 public class ScheduleServlet extends HttpServlet {
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         DBConnector connector = (DBConnector) getServletContext().getAttribute("dbConnector");
         ScheduleService scheduleService = (ScheduleService) getServletContext().getAttribute("sch-service");
-
-        Collection<Schedule> collection = scheduleService.getUserSchedule(connector.getConnection(), (Integer) req.getSession().getAttribute("id"));
-        req.getSession().setAttribute("schedule", collection);
-        req.getRequestDispatcher("WEB-INF/pages/schedule.jsp").forward(req, resp);
+        try {
+            Collection<Schedule> collection = scheduleService.getUserSchedule(connector.getConnection(), (Integer) req.getSession().getAttribute("id"));
+            req.getSession().setAttribute("schedule", collection);
+            req.getRequestDispatcher("WEB-INF/pages/schedule.jsp").forward(req, resp);
+        }
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
+        }
     }
 
     @Override
@@ -34,6 +40,7 @@ public class ScheduleServlet extends HttpServlet {
         GroupService groupService = (GroupService) getServletContext().getAttribute("group-service");
         ValidatorImplSchedule validator = new ValidatorImplSchedule();
 
+        try{
         if (!(req.getParameter("day") == null) &&
                 !(req.getParameter("groupName") == null) &&
                 !(req.getParameter("hourS").equals("")) &&
@@ -63,8 +70,10 @@ public class ScheduleServlet extends HttpServlet {
                         req.setAttribute("failedDescription", "You can add only one training for group per day. You cannot add more than one training on one period as well.");
                         req.getRequestDispatcher("WEB-INF/pages/schedule.jsp").forward(req, resp);
                     }
-                    req.setAttribute("done", "true");
-                    resp.sendRedirect(req.getContextPath() + "/schedule");
+                    else {
+                        req.setAttribute("done", "true");
+                        resp.sendRedirect(req.getContextPath() + "/schedule");
+                    }
                 }
                 else {
                     req.setAttribute("done", "false");
@@ -88,6 +97,10 @@ public class ScheduleServlet extends HttpServlet {
         }
         else {
             req.getRequestDispatcher("WEB-INF/pages/schedule.jsp").forward(req, resp);
+        }
+        }
+        catch (IllegalArgumentException e){
+            req.getRequestDispatcher("/WEB-INF/pages/error.jsp").forward(req,resp);
         }
     }
 }
