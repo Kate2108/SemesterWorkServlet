@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DBConnector {
     private final String DRIVER = "org.postgresql.Driver";
-    private final String DB_URL = "jdbc:postgresql://localhost:5432/semester-work";
-    private final String USERNAME = "postgres";
-    private final String PASSWORD = "Katelukk2003";
+    private final String DB_URL = "";
+    private final String USERNAME = "";
+    private final String PASSWORD = "";
     private Connection connection;
 
     public Connection getConnection(){
